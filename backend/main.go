@@ -11,19 +11,24 @@ import (
 )
 
 // define our WebSocket endpoint
-func serveWs(w http.ResponseWriter, r *http.Request) {
-    fmt.Println(r.Host)
-
-    ws, err := websocket.Upgrade(w, r)
+func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
+    fmt.Println("WebSocket Endpoint Hit")
+    conn, err := websocket.Upgrade(w, r)
     if err != nil {
-        fmt.Fprintf(w, "%+V\n", err)
+        fmt.Fprintf(w, "%+v\n", err)
     }
-    go websocket.Writer(ws)
-    websocket.Reader(ws)
+
+    client := &websocket.Client{
+        Conn: conn,
+        Pool: pool,
+    }
+
+    pool.Register <- client
+    client.Read()
 }
 
 func setupRoutes(x *deck.Deck) {
-    http.HandleFunc("/ws", func(rw http.ResponseWriter, r *http.Request) {
+    http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
         log.Println("Hello, World!")
         d, err := io.ReadAll(r.Body)
         if err != nil {
@@ -41,7 +46,12 @@ func setupRoutes(x *deck.Deck) {
         log.Println("Goodbye, World!")
     })
 
-    http.HandleFunc("/ws", serveWs)
+    pool := websocket.NewPool()
+    go pool.Start()
+
+    http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+        serveWs(pool, w, r)
+    })
 }
 
 func main() {
@@ -50,6 +60,7 @@ func main() {
     x := &x0
     fmt.Println(x0)
 
+    fmt.Println("Distributed Chat App v0.01")
     setupRoutes(x)
     http.ListenAndServe(":8080", nil)
 }

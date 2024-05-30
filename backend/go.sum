@@ -4,3 +4,5 @@ github.com/pedroafleite/game-golang/backend v0.0.0-20240530141739-391d1e66f50e h
 github.com/pedroafleite/game-golang/backend v0.0.0-20240530141739-391d1e66f50e/go.mod h1:pg4Pc8u0lvZk3x5+TzjFXlXpJtFAO8dpr+i0F6jwMcg=
 golang.org/x/net v0.17.0 h1:pVaXccu2ozPjCXewfr1S7xza/zcXTity9cCdXQYSjIM=
 golang.org/x/net v0.17.0/go.mod h1:NxSsAGuq816PNPmqtQdLE42eU2Fs7NoRIZrHJAlaCOE=
+golang.org/x/net v0.25.0 h1:d/OCCoBEUq33pjydKrGQhw7IlUPI2Oylr+8qLx49kac=
+golang.org/x/net v0.25.0/go.mod h1:JkAGAh7GEvH74S6FOH42FLoXpXbE/aqXSrIQjXgsiwM=
