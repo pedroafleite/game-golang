@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/websocket"
 	"github.com/pedroafleite/game-golang/backend/deck"
 	"github.com/pedroafleite/game-golang/backend/websocket"
 )
@@ -14,7 +13,7 @@ import (
 // define our WebSocket endpoint
 func serveWs(w http.ResponseWriter, r *http.Request) {
     fmt.Println(r.Host)
-    
+
     ws, err := websocket.Upgrade(w, r)
     if err != nil {
         fmt.Fprintf(w, "%+V\n", err)
@@ -24,7 +23,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 }
 
 func setupRoutes(x *deck.Deck) {
-    http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
+    http.HandleFunc("/ws", func(rw http.ResponseWriter, r *http.Request) {
         log.Println("Hello, World!")
         d, err := io.ReadAll(r.Body)
         if err != nil {
