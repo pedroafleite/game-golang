@@ -13,7 +13,7 @@ func (s Suit) String() string {
 	case Spades:
 		return "SPADES"
 	case Harts:
-		return "HARTS"
+		return "HEARTS"
 	case Diamonds:
 		return "DIAMONDS"
 	case Clubs:
