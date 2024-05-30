@@ -12,7 +12,7 @@ import (
 
 var upgrader = websocket.Upgrader{
     ReadBufferSize:  1024,
-  WriteBufferSize: 1024,
+    WriteBufferSize: 1024,
 
   // We'll need to check the origin of our connection
   // this will allow us to make requests from our React
@@ -58,8 +58,8 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
     reader(ws)
 }
 
-func setupRoutes(x deck.Deck) {
-    http.HandleFunc("/", func(rw http.ResponseWriter, r*http.Request) {
+func setupRoutes(x *deck.Deck) {
+    http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
         log.Println("Hello, World!")
         d, err := io.ReadAll(r.Body)
         if err != nil {
@@ -82,8 +82,9 @@ func setupRoutes(x deck.Deck) {
 
 func main() {
     fmt.Println("Starting")
-    x := deck.New()
-    fmt.Println(x[:3])
+    var x0 = deck.New()
+    x := &x0
+    fmt.Println(x0)
 
     setupRoutes(x)
     http.ListenAndServe(":8080", nil)
