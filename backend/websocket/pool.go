@@ -1,6 +1,9 @@
 package websocket
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 type Pool struct {
     Register   chan *Client
@@ -25,7 +28,6 @@ func (pool *Pool) Start() {
             pool.Clients[client] = true
             fmt.Println("Size of Connection Pool: ", len(pool.Clients))
             for client, _ := range pool.Clients {
-                fmt.Println(client)
                 client.Conn.WriteJSON(Message{Type: 1, Body: "New User Joined..."})
             }
             break
@@ -38,12 +40,21 @@ func (pool *Pool) Start() {
             break
         case message := <-pool.Broadcast:
             fmt.Println("Sending message to all clients in Pool")
+            log.Println(pool.Clients)
             for client, _ := range pool.Clients {
                 if err := client.Conn.WriteJSON(message); err != nil {
                     fmt.Println(err)
                     return
                 }
             }
+            // Send data to the first client
+            keys := make([]*Client, 0, len(pool.Clients))
+            for k := range pool.Clients {
+                keys = append(keys, k)
+            }
+
+            keys[0].Conn.WriteJSON("HEY!")
+
         }
     }
 }

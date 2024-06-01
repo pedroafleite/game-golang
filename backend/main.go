@@ -23,11 +23,18 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
         Pool: pool,
     }
 
+    fmt.Println("here") 
+    var x = deck.New()
+    log.Printf("Your cards are %s\n", x[:3])
+    if len(pool.Clients) >= 1 {            
+        log.Printf("Your cards are %s\n", x[:3])
+    }
+
     pool.Register <- client
     client.Read()
 }
 
-func setupRoutes(x *deck.Deck) {
+func setupRoutes() {
     http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
         log.Println("Hello, World!")
         d, err := io.ReadAll(r.Body)
@@ -39,7 +46,6 @@ func setupRoutes(x *deck.Deck) {
         log.Printf("Data %s\n", d)
 
         fmt.Fprintf(rw, "Hello %s\n", d)
-        fmt.Fprintf(rw, "Your cards are %s\n", x[:3])
     })
 
     http.HandleFunc("/goodbye", func(http.ResponseWriter, *http.Request) {
@@ -55,12 +61,8 @@ func setupRoutes(x *deck.Deck) {
 }
 
 func main() {
-    fmt.Println("Starting")
-    var x0 = deck.New()
-    x := &x0
-    fmt.Println(x0)
 
     fmt.Println("Distributed Chat App v0.01")
-    setupRoutes(x)
+    setupRoutes()
     http.ListenAndServe(":8080", nil)
 }
